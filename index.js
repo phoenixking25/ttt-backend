@@ -2,27 +2,34 @@ var express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
     bodyParser = require('body-parser')
-    cors = require('cors'),
+cors = require('cors'),
     fetcher = require('./fetch')
 
 
 app.use(cors())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
 app.use(bodyParser.json())
 
 app.route('/getData')
     .post((req, res) => {
         fetcher.getFrequency().then((data) => {
-            var array = data.slice(0, req.body.number) 
+            var array = data.slice(0, req.body.number)
             res.send({
-                "status":"success",
+                "status": "success",
                 "data": array
             })
         })
     })
+    .get((req, res) => {
+        res.send("working")
+    })
 
 app.use(function (req, res) {
-    res.status(404).send({url: req.originalUrl + ' not found'})
+    res.status(404).send({
+        url: req.originalUrl + ' not found'
+    })
 })
 
 app.listen(port)
